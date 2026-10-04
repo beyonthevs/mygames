@@ -1,0 +1,19 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; but it is human-readable and can be written manually.
+
+config_version=5
+
+[application]
+
+config/name="Deicide"
+run/main_scene="res://scenes/MainWorld.tscn"
+config/features=PackedStringArray("4.3", "Forward Plus")
+
+[autoload]
+
+EventBus="*res://core/EventBus.gd"
+
+[rendering]
+
+renderer/rendering_method="forward_plus"
