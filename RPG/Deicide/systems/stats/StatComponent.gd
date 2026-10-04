@@ -1,6 +1,8 @@
 class_name StatComponent
 extends Node
 
+signal entity_died(entity: Node)
+
 @export var base_strength: float = 10.0
 @export var base_agility: float = 10.0
 @export var base_constitution: float = 10.0
@@ -48,17 +50,18 @@ func add_flat_modifier(stat: StringName, val: float) -> void:
 	recalculate()
 
 func take_damage(amount: float) -> void:
-	if amount <= 0.0:
-		return
 	current_hp = maxf(0.0, current_hp - amount)
-	EventBus.stat_changed.emit(self, &"hp", current_hp, max_hp)
+	EventBus.stat_changed.emit(owner if owner else self, &"hp", current_hp, max_hp)
+	
+	if current_hp <= 0.0:
+		entity_died.emit(owner if owner else self)
 
 func heal(amount: float) -> void:
 	if amount <= 0.0:
 		return
 	current_hp = minf(max_hp, current_hp + amount)
-	EventBus.stat_changed.emit(self, &"hp", current_hp, max_hp)
+	EventBus.stat_changed.emit(owner if owner else self, &"hp", current_hp, max_hp)
 
 func _emit_core_stats() -> void:
-	EventBus.stat_changed.emit(self, &"hp", current_hp, max_hp)
-	EventBus.stat_changed.emit(self, &"mp", current_mp, max_mp)
+	EventBus.stat_changed.emit(owner if owner else self, &"hp", current_hp, max_hp)
+	EventBus.stat_changed.emit(owner if owner else self, &"mp", current_mp, max_mp)

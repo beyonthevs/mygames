@@ -12,6 +12,7 @@ extends CharacterBody2D
 @export var chase_speed: float = 120.0
 
 var target_player: Node2D = null
+var _is_dead: bool = false
 
 func _ready() -> void:
 	if is_instance_valid(hurtbox_component) and hurtbox_component.stat_component == null:
@@ -24,6 +25,9 @@ func _ready() -> void:
 			EventBus.stat_changed.connect(_on_global_stat_changed)
 
 func _physics_process(delta: float) -> void:
+	if _is_dead:
+		return
+		
 	if not is_instance_valid(target_player):
 		_find_target()
 		
@@ -46,13 +50,22 @@ func _on_global_stat_changed(entity: Node, stat_name: StringName, current_val: f
 	if entity == stat_component and stat_name == &"hp" and current_val <= 0.0:
 		_on_death()
 
-func _on_death() -> void:
+func _on_death(_victim: Node = null) -> void:
+	if _is_dead:
+		return
+	_is_dead = true
+	
+	print("[BaseEnemy] Enemigo abatido: ", enemy_name, " Nivel: ", enemy_level)
 	EventBus.enemy_killed.emit(enemy_level, is_boss, global_position)
 	
+	# Desactivar colisiones de inmediato para no seguir recibiendo impactos
+	if hurtbox_component:
+		hurtbox_component.set_deferred("monitoring", false)
+		hurtbox_component.set_deferred("monitorable", false)
+		
 	if is_boss and is_instance_valid(chest_scene):
 		var chest: Node = chest_scene.instantiate()
 		get_tree().current_scene.call_deferred("add_child", chest)
-		
 		var chest_2d: Node2D = chest as Node2D
 		if chest_2d:
 			chest_2d.set_deferred("global_position", global_position)
