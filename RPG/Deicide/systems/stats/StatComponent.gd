@@ -32,7 +32,6 @@ func recalculate() -> void:
 	attack_power = total_strength * 2.5 + _get_flat_mod(&"attack_power")
 	defense = total_constitution * 1.0 + _get_flat_mod(&"defense")
 	
-	# Clamp currents to new maximums
 	current_hp = clampf(current_hp, 0.0, max_hp)
 	current_mp = clampf(current_mp, 0.0, max_mp)
 	

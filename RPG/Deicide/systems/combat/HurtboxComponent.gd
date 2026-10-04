@@ -8,17 +8,14 @@ func take_hit(payload: Dictionary) -> void:
 		push_error("HurtboxComponent: No se ha asignado un StatComponent válido.")
 		return
 		
-	# Extracción de la defensa actual proveniente de los diccionarios de modificadores
 	var target_defense: float = stat_component.defense
 	
-	# Desestructuración del payload estocástico
 	var base_attack: float = payload.get("base_attack", 0.0) as float
 	var true_damage: float = payload.get("true_damage", 0.0) as float
 	var ignore_defense: bool = payload.get("ignore_defense", false) as bool
 	var crit_mult: float = payload.get("crit_mult", 1.5) as float
 	var is_crit: bool = payload.get("is_crit", false) as bool
 	
-	# Llamada pura al motor matemático central
 	var final_damage: float = Formulas.calculate_damage(
 		base_attack,
 		target_defense,
@@ -28,5 +25,4 @@ func take_hit(payload: Dictionary) -> void:
 		true_damage
 	)
 	
-	# Resolución de estado
 	stat_component.take_damage(final_damage)

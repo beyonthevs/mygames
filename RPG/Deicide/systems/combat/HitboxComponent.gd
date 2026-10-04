@@ -15,7 +15,6 @@ func _ready() -> void:
 	area_entered.connect(_on_area_entered)
 
 func _on_area_entered(area: Area2D) -> void:
-	# Verificamos mediante duck-typing o type casting si es un Hurtbox válido
 	if area is HurtboxComponent:
 		area.take_hit(damage_payload)
 		hit_landed.emit()

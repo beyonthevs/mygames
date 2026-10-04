@@ -13,7 +13,6 @@ static func calculate_damage(attack: float, target_defense: float, ignore_defens
 	var final_damage: float = attack
 	
 	if not ignore_defense:
-		# Using a standard damage mitigation formula based on defense
 		var mitigation: float = 100.0 / (100.0 + maxf(0.0, target_defense))
 		final_damage *= mitigation
 		

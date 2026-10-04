@@ -1,6 +1,8 @@
 class_name LevelLockEngine
 extends Node
 
+@export var stat_component: StatComponent
+
 var player_level: int = 1
 var experience_pool: int = 0
 var gold_balance: int = 0
